@@ -1,10 +1,10 @@
 module.exports = {
   moduleNameMapper: {
     // mock out the browser version of WASM bindings with the nodejs bindings
-    '^(.*)../wasm/cardano_multiplatform_lib/cardano_multiplatform_lib.generated(.*)$':
-      '$1../wasm/cardano_multiplatform_lib/nodejs/cardano_multiplatform_lib.generated$2',
-    '^(.*)../wasm/cardano_message_signing/cardano_message_signing.generated(.*)$':
-      '$1../wasm/cardano_message_signing/nodejs/cardano_message_signing.generated$2',
+    '^(.*)/wasm/cardano_multiplatform_lib/cardano_multiplatform_lib(.*)$':
+      '$1/wasm/cardano_multiplatform_lib/nodejs/cardano_multiplatform_lib$2',
+    '^(.*)/wasm/cardano_message_signing/cardano_message_signing(.*)$':
+      '$1/wasm/cardano_message_signing/nodejs/cardano_message_signing$2',
     // blockfrost keys
     secrets: '../../secrets.testing.js',
   },

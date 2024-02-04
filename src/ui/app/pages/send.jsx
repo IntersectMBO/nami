@@ -267,7 +267,7 @@ const Send = () => {
       const checkOutput = Loader.Cardano.TransactionOutput.new(
         _address.isM1
           ? Loader.Cardano.Address.from_bech32(_address.result)
-          : Loader.Cardano.Address.from_bytes(
+          : Loader.Cardano.Address.from_raw_bytes(
               await isValidAddress(_address.result)
             ),
         await assetsToValue(output.amount)
@@ -306,7 +306,7 @@ const Send = () => {
         Loader.Cardano.TransactionOutput.new(
           _address.isM1
             ? Loader.Cardano.Address.from_bech32(_address.result)
-            : Loader.Cardano.Address.from_bytes(
+            : Loader.Cardano.Address.from_raw_bytes(
                 await isValidAddress(_address.result)
               ),
           await assetsToValue(output.amount)
@@ -368,7 +368,7 @@ const Send = () => {
         auxiliaryData.metadata() ? auxiliaryData : null
       );
       setFee({ fee: tx.body().fee().to_str() });
-      setTx(Buffer.from(tx.to_bytes()).toString('hex'));
+      setTx(Buffer.from(tx.to_cbor_bytes()).toString('hex'));
     } catch (e) {
       prepareTx(count + 1, data);
     }
@@ -384,7 +384,7 @@ const Send = () => {
     account.current = currentAccount;
     if (txInfo.protocolParameters) {
       const _utxos = txInfo.utxos.map((utxo) =>
-        Loader.Cardano.TransactionUnspentOutput.from_bytes(
+        Loader.Cardano.TransactionUnspentOutput.from_cbor_bytes(
           Buffer.from(utxo, 'hex')
         )
       );
@@ -804,7 +804,7 @@ const Send = () => {
         sign={async (password, hw) => {
           capture(Events.SendTransactionConfirmationConfirmClick);
           await Loader.load();
-          const txDes = Loader.Cardano.Transaction.from_bytes(
+          const txDes = Loader.Cardano.Transaction.from_raw_bytes(
             Buffer.from(tx, 'hex')
           );
           if (hw) {
