@@ -100,7 +100,7 @@ export const signAndSubmit = async (
 ) => {
   await Loader.load();
   const witnessSet = await signTx(
-    Buffer.from(tx.to_bytes(), 'hex').toString('hex'),
+    Buffer.from(tx.to_cbor_bytes(), 'hex').toString('hex'),
     keyHashes,
     password,
     accountIndex
@@ -112,7 +112,7 @@ export const signAndSubmit = async (
   );
 
   const txHash = await submitTx(
-    Buffer.from(transaction.to_bytes(), 'hex').toString('hex')
+    Buffer.from(transaction.to_cbor_bytes(), 'hex').toString('hex')
   );
   return txHash;
 };
@@ -124,7 +124,7 @@ export const signAndSubmitHW = async (
   await Loader.load();
 
   const witnessSet = await signTxHW(
-    Buffer.from(tx.to_bytes(), 'hex').toString('hex'),
+    Buffer.from(tx.to_cbor_bytes(), 'hex').toString('hex'),
     keyHashes,
     account,
     hw,
@@ -139,7 +139,7 @@ export const signAndSubmitHW = async (
 
   try {
     const txHash = await submitTx(
-      Buffer.from(transaction.to_bytes(), 'hex').toString('hex')
+      Buffer.from(transaction.to_cbor_bytes(), 'hex').toString('hex')
     );
     return txHash;
   } catch (e) {
@@ -182,8 +182,8 @@ export const delegationTx = async (
     txBuilder.add_certificate(
       Loader.Cardano.Certificate.new_stake_registration(
         Loader.Cardano.StakeRegistration.new(
-          Loader.Cardano.StakeCredential.from_keyhash(
-            Loader.Cardano.Ed25519KeyHash.from_bytes(
+          Loader.Cardano.Credential.new_pub_key(
+            Loader.Cardano.Ed25519KeyHash.from_raw_bytes(
               Buffer.from(account.stakeKeyHash, 'hex')
             )
           )
@@ -194,12 +194,12 @@ export const delegationTx = async (
   txBuilder.add_certificate(
     Loader.Cardano.Certificate.new_stake_delegation(
       Loader.Cardano.StakeDelegation.new(
-        Loader.Cardano.StakeCredential.from_keyhash(
-          Loader.Cardano.Ed25519KeyHash.from_bytes(
+        Loader.Cardano.Credential.new_pub_key(
+          Loader.Cardano.Ed25519KeyHash.from_raw_bytes(
             Buffer.from(account.stakeKeyHash, 'hex')
           )
         ),
-        Loader.Cardano.Ed25519KeyHash.from_bytes(
+        Loader.Cardano.Ed25519KeyHash.from_raw_bytes(
           Buffer.from(poolKeyHash, 'hex')
         )
       )
@@ -325,8 +325,8 @@ export const undelegateTx = async (account, delegation, protocolParameters) => {
   txBuilder.add_certificate(
     Loader.Cardano.Certificate.new_stake_deregistration(
       Loader.Cardano.StakeDeregistration.new(
-        Loader.Cardano.StakeCredential.from_keyhash(
-          Loader.Cardano.Ed25519KeyHash.from_bytes(
+        Loader.Cardano.Credential.new_pub_key(
+          Loader.Cardano.Ed25519KeyHash.from_raw_bytes(
             Buffer.from(account.stakeKeyHash, 'hex')
           )
         )

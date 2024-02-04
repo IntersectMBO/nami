@@ -1,5 +1,5 @@
-import * as wasm from '../wasm/cardano_multiplatform_lib/cardano_multiplatform_lib.generated';
-import * as wasm2 from '../wasm/cardano_message_signing/cardano_message_signing.generated';
+// import * as wasm from '../wasm/cardano_multiplatform_lib/cardano_multiplatform_lib';
+// import * as wasm2 from '../wasm/cardano_message_signing/cardano_message_signing';
 
 /**
  * Loads the WASM modules
@@ -8,20 +8,18 @@ import * as wasm2 from '../wasm/cardano_message_signing/cardano_message_signing.
 class Loader {
   async load() {
     if (this._wasm && this._wasm2) return;
-    try {
-      await wasm.instantiate();
-      await wasm2.instantiate();
-    } catch (_e) {
-      // Only happens when running with Jest (Node.js)
-    }
     /**
      * @private
      */
-    this._wasm = wasm;
+    this._wasm = await import(
+      '../wasm/cardano_multiplatform_lib/cardano_multiplatform_lib'
+    );
     /**
      * @private
      */
-    this._wasm2 = wasm2;
+    this._wasm2 = await import(
+      '../wasm/cardano_message_signing/cardano_message_signing'
+    );
   }
 
   get Cardano() {
